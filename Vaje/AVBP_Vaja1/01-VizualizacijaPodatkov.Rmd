@@ -1,0 +1,110 @@
+---
+title: "01 - Vizualizacija podatkov"
+output: html_notebook
+---
+
+```{r setup}
+library(tidyverse)
+library(ggplot2)
+```
+
+
+Uporabljali bomo podatke o porabi goriva za 38 različnih avtomobilov. Podatki so "demo" podatki paketa ggplot2 in so že vgrajeni kot objekt 'mpg'. Poglej si podatke, poglej help za objekt mpg.
+
+```{r}
+mpg
+```
+
+
+## Naloga 1
+
+Zežnite kodo v spodnjem chunk-u in naredite graf velikosti motorja in porabe goriva.
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy))
+```
+
+## Naloga 2
+
+Dodajte barvo (`color`), velikost (`size`), prosojnost (`alpha`) in obliko (`shape`) estetike vašemu grafu. Igrajte se. :)
+
+Kaj se zgodi, ko mapirate estetiko na kategorične spremenljivke? Kaj ko na zvezne? Kaj se zgodi, ko mapirate več kot eno estetiko naenkrat?
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy))
+```
+
+## Naloga 3
+
+Zamenjajte razsevni diagram (scatterplot) s 'škatla z brki' (boxplot). Uporabite plonk (cheetsheet) za ggplot2, glej 'Help' meni zgoraj. Kar pogumno, ugibajte.
+
+```{r}
+ggplot(mpg) + geom_point(aes(class, hwy))
+```
+
+
+## Naloga 4
+
+Skupaj s partnerji naredite histogram porabe goriva na avtocesti (`hwy`) kot spodaj. Podatki so še vedno `mpg`. Uporabite plonk za ggplot2 (Help/Cheatsheets). **Namig:** ne potrebujete parametra y.
+
+
+```{r}
+
+```
+
+## Naloga 5
+
+Skupaj s partnerji naredite ‘density plot' porabe goriva (`hwy`), pobarvano po kategoriji vozila (`class`), kot spodaj. Podatki so še vedno `mpg`. Uporabite plonk za ggplot2 (Help/Cheatsheets).
+
+
+```{r}
+
+```
+
+
+## Naloga 6
+
+Skupaj s partnerji naredite stolpični diagram (bar chart) porabe goriva (`hwy`), pobarvano po kategoriji vozila (`class`), kot spodaj.
+
+```{r}
+NEUMNO!!!!! NASLEDNJE LETO NE!!!!
+```
+
+## Your Turn 7
+
+Skupaj s partnerji najprej predvidite, kaj bo tale koda naredila. Potem jo zaženite. 
+
+```{r}
+ggplot(mpg) + 
+  geom_point(aes(displ, hwy)) +
+  geom_smooth(aes(displ, hwy))
+```
+
+## Naloga 8
+
+Kaj nam vrne `getwd()`n?
+
+```{r}
+
+```
+
+## Naloga 9
+
+Shranite zadnji graf in ga potem poiščite v “Files” (morda boste morali osvežiti “Files”, zavita puščica desno).
+
+```{r}
+
+```
+
+***
+
+## Za 'vzet domov'
+
+S tole preprosto šablono lahko naredite neskončno grafov v **ggplot2**.
+
+```{r eval = FALSE}
+ggplot(data = <DATA>) +
+  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
+```

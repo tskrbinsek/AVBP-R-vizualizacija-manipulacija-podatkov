@@ -1,0 +1,14 @@
+date	label	description
+2020-03-07	500 ljudi	Prepoved prireditev zaprtega tipa nad 500 ljudi
+2020-03-10	100 ljudi	Prepoved prireditev zaprtega tipa nad 100 ljudi
+2020-03-12	Epidemija	Razglas epidemije
+2020-03-16	Šole, prevoz	Šole se zaprejo, že pretekli petek po priporočilu 3/4 otrok ni bilo v šolah. Prepoved javnega prevoza, zračni promet.
+2020-03-20	Zbiranje	Prepoved zbiranja na javnih mestih.
+2020-03-30	Občine	Prepoved gibanja izven občine prebivališča.
+2020-10-09	10 oseb	Omejitev zbiranja na 10 oseb. Dodatne omejitve za dejavnosti v zaprtih prostorih (20m2 na osebo).
+2020-10-16	Regije	Omejitve za rdeče regije: gibanje izven regije, uporaba mask zunaj, prepoved določenih dejavnosti.
+2020-10-19	Šole-6r	OŠ od 6.razred, SŠ in glasbene šole na daljavo
+2020-10-19	Epidemija	Vlada je razglasila epidemijo za 30 dni
+2020-10-20	Gibanje	Omejitev gibanja med 21:00-6:00, prehodi med regijami. Dovoljeno zbiranje do 6 oseb. Prepoved vseh prireditev.
+2020-10-24	Gostilne	Zaprtje gostinskih lokalov, hotelov, trgovskih centrov, frizerski in kozmetični saloni. Zaprti dijaški in študentski domovi, zmanjšan javni prevoz.
+2020-10-27	Občine	Prepoved gibanja izven občine prebivališča.

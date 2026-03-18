@@ -1,0 +1,68 @@
+---
+title: "00 - Uvod"
+output: html_notebook
+---
+
+### R Studio != R
+('!=' pomeni v R-u logični operator "ni enako")
+
+R Studio je **okolje**, ki nam olajša delo z R-om. "Pravi" R vidite v konzoli spodaj.
+
+Tole je "**Markdown**" dokument - kombinacija besedila (npr. opisa analize) in R-kode, ki se "zaštrika" (knit) v skupen dokument. RStudio pravi temu tudi "**R Notebook**", ki je konceptualno ista stvar, omogoča pa "preview".
+
+Besedilo je lahko kar koli - so pa posebni ukazi za formatiranje. Bomo pogledali na koncu.
+
+
+R kodo pišete v **"chunk"-e** - kose kode, ki naredijo en smiseln korak ali proizvedejo določen rezultat. Chunk naredimo tako, da stisnemo ctrl-alt-i (lahko ga tudi na roke natipkamo - začne se s tremi črticami nazaj (`) in konča na isti način). Lahko pa stisnemo gumb "Insert" v orodni vrstici zgoraj.
+
+Poskusite narediti chunk:
+
+--- tukaj naredite prazen chunk ---
+
+Odlično! Ne pozabite - v chunk-ih pišete kodo in se morate držati pravil sintakse, drugače bodo napake. Z znakom lojtra (#) lahko v chunk napišete tudi 'komentar' - besedilo. 
+
+Spodaj je chunk po imenu chunk2. Če postavite kurzor na ukaz, ki bi ga radi zagnali (v tem primeru 'plot') in pritisnete <ctrl-enter>, bo ukaz šel v konzolo (spodaj) in se izvedel. Če s kurzorjem kjer koli v "chunk"-u pritisnete <ctrl-shift-enter>, bo R izvedel celoten "chunk". Lahko uporabiš tudi "Run" meni zgoraj desno.
+
+**Naloga** Poskusi pognati chunk2 na več načinov. Zaženi samo vrstico z ukazom 'plot'.
+
+```{r chunk2}
+#tole je komentar - v R-ju so komentarji vse vrstice, ki se začnejo z lojtro (#)
+#ko pišete R kodo, jo komentirajte - tako boste naslednji dan (teden, mesec, leto...) morda
+#vedeli kaj ste počeli. :)
+
+#Tole bo pa nekaj narisalo:
+plot(pressure)
+```
+
+Ko chunk zaženete, se pod njim izpiše/izriše rezultat zagnane kode.
+
+
+Nov "R Notebook" naredite tako, da kliknete **File > New File > R Notebook**. Ampak tega zdaj ne bomo.
+
+
+### HTML
+
+Ko posnamete "notebook", se zraven naredi '.html' datoteka s kodo in rezultati. Tako vam kar sproti avtomagično nastaja lepo oblikovano poročilo.
+
+Pritisnite gumb *Preview* nad tem dokumentom ali *Ctrl+Shift+K*, da odprete predogled HTML datoteke. Poskusite
+
+### Paketi
+
+Katerokoli 'Base R' funkcijo lahko zaženete takoj, ko odprete R notebook. Če pa želite zagnati katero od funkcij iz paketov, morate ta paket najprej naložiti.
+
+
+Se spomnite, kako se naloži Tidyverse pakete? Zaženite kodo spodaj.
+
+```{r}
+# Morali bi že instalirati Tidyverse, zdaj morate samo naložiti paket v ta notebook.
+# Ne dela? Morda niste instalirali Tideverse paketov. Nič hudega.
+# Če Tidyverse ni instaliran in vam javlja napako, umaknite znak za komentar (#) pred naslednjo vrstico in jo zaženite.
+
+# install.packages("tidyverse")
+library("tidyverse")
+```
+
+Super! Pakete morate naložiti vsakič, ko odprete 'notebook'.
+
+Ste morda opazili trik? Z lojtro (#) v chunk-u lahko vklopite/izklopite posamezne koščke kode. To se v praksi veliko uporablja - če kak del kode ne želiš izbrisati, nočeš pa, da se v tem trenutku zažene, preprosto na začetek vrstice napišeš #.
+

@@ -1,0 +1,603 @@
+---
+title: "Raziskovanje podatkov - analiza epidemije COVID-19"
+output: html_notebook
+---
+
+
+# Današnja vaja - cilji
+
+Cilj današnje vaje je (pol)samostojno raziskati veliko in kompleksno zbirko podatkov.
+
+Velik del analize podatkov je iskanje vzorcev v podatkih, kar nam omogoča postavljanje hipotez, ki se jih potem lotimo z eksperimentalnimi in konfirmatornimi pristopi. Ko dobimo nove podatke, se vedno gremo najprej z njimi igrati. :)
+
+# Opis problema -Pandemija COVID-19
+
+**Vir: https://sl.wikipedia.org/wiki/COVID-19**
+
+Koronavirusna bolezen 2019 (COVID-19) je nalezljiva bolezen, ki jo povzroča virus SARS-CoV-2. Širi se predvsem z respiratornimi kapljicami, ki jih okužene osebe ustvarjajo ob kašlju in kihanju. Povprečna inkubacijska doba (čas od okužbe do pojava simptomov) znaša 5,5 dni; v skoraj vseh primerih se simptomi izrazijo do 12. dneva. Širjenje je mogoče omejiti z umivanjem rok, uporabo obraznih mask in drugimi higienskimi ukrepi.
+
+Okužba je pri nekaterih zelo blaga in simptomi se lahko sploh ne izrazijo, lahko pa se pojavijo (med drugim) vročina, kašelj, oteženo dihanje, bolečine v mišicah in utrujenost. Okužba lahko napreduje v pljučnico in sindrom akutne dihalne stiske. 
+
+________________________________
+
+# Naloga
+
+V nalogi bomo z dejanskimi, ažurnimi podatki pogledali nastanek in potek pandemije COVID-19. V okviru tega imamo več nalog:
+
+1. Pogledali bomo začetek pandemije na Kitajskem in raziskali kdaj je bolezen "preskočila meje" in začela dobivati pandemične razsežnosti.
+
+2. Pogledali bomo COVID-19 pandemijo v Sloveniji in učinek posameznih ukrepov na njen potek.
+
+3. Raziskali bomo razlike med državami in poskusili ugotoviti, kaj vpliva na hitrost rasti števila okužb.
+
+## Način dela
+
+Analizo bomo delali skupaj, korak po korak. Vsako nalogo bomo prebrali, potem boste naredili v skupinah. Rezultat bomo predstavili in šli na naslednji korak.
+
+
+## Setup - paketi
+Dobra navada je na začetku narediti "setup" chunk z vsemi knjižnicami. Setup chunk se samodejno zažene ko prvič zaženemo katerokoli kodo v R Notebook-u, tako da se knjižnice zagotovo naložijo.
+
+Vpišite sami v setup knjižnice, za katere mislite, da jih boste potrebovali, potem pa bomo sproti dopolnjevali.
+
+```{r setup}
+#globalne nastavitve obnašanja "chunk"-ov
+knitr::opts_chunk$set(
+  fig.width = 5, fig.height = 3.5, #dimenzije slik (v inčih)
+  warnings = F, #izkopljena opozorila
+  messages = F, #izklopljena sporočila funkcij
+  #echo = F, #izklop prikaza kode v "knitanem" dokumentu
+  dpi=250 #resolucija slik (dpi = dots per inch)
+)
+
+
+# Knjižnice za analizo
+#....
+library(tidyverse)
+library(ggpubr)
+#install.packages("ggpubr")
+
+#globalno bomo nastavili temo za ggplot2 na črno/belo
+theme_set(theme_bw())
+
+```
+
+
+## Podatki
+
+Podatke bomo pobrali iz "ourworldindata.org", ki zbira različne globalno pomembne podatke, jih uredi in naredi javno dostopne.
+
+https://ourworldindata.org/coronavirus-source-data
+
+Podatki se osvežujejo vsak dan in jih bomo pobrali neposredno z Interneta. 
+**Update 2024: "Live" podatke so nehali osveževati in jih umaknili s strežnika, ker ni več aktualno, zato bomo uporabili lokalno verzijo podatkov.**
+
+```{r message=F, warning = F}
+# covid_all=read_csv("https://covid.ourworldindata.org/data/owid-covid-data.csv")
+
+#covid_all=read_csv("COVIDdataBackup.csv")
+covid_all=read_csv("owid-covid-data-old.csv")
+```
+
+### Naloga 0
+
+V skupini poglejte podatke in njihovo strukturo. Predebatirajte.
+
+metapodatki: https://github.com/owid/covid-19-data/blob/master/public/data/owid-covid-codebook.csv
+(odprite v brskalniku)
+
+_____________________________
+
+# 1. Iz epidemije v pandemijo
+
+Prvi primer COVID-19 je bil zaznan sredi novembra leta 2019 na Kitajskem. Konec decembra 2019 je Kitajska Svetovni zdravstveni organizacija poročala o odkritju pljučnic neznanega izvora v Vuhanu, glavnem mestu pokrajine Hubej na Kitajskem. Izbruh okužbe je bil 30. januarja 2020 proglašen za mednarodno pomembno grožnjo javnemu zdravju. Zaradi globalnega širjenja okužbe je Svetovna zdravstvena organizacija 11. marca 2020 proglasila pandemijo.
+
+Poglejmo kako se je COVID-19 širil in kdaj je "preskočil" ter postal globalna pandemija. Ampak najprej poglejmo kako se je širil na Kitajskem.
+
+Zanima nas začetek... prvi del leta 2020. Pa poglejmo.
+
+### 1.1 Naloga
+
+Narišimo graf globalno skupnega števila primerov COVID-19 na začetku pandemije. 
+
+a) Naredi nov dataframe `covid_start`, kjer bodo samo zapisi od 22. januarja (ko so se začeli beležiti primeri) do 20. marca 2020.
+
+b) Nariši graf kako je naraščalo globalno število primerov v tem začetnem obdobju pandemije. Dajte x-osi ime "datum" in y osi "kumulativno št. primerov"
+
+
+**Namigi**
+- Datum je v R-u podatkovni tip `Date`. Besedilo spremenimo v datum takole: as.Date("2020-12-30") - trideseti december 2020. Pazite na format - "leto-mesec-dan".
+
+V podatkih je tudi lokacija "World", kar lahko uporabimo.
+
+- Če ste pozabili dplyr, imate zanj 'cheatsheet' v Help-u zgoraj. Če ga ni, je Google vaš prijatelj.
+
+```{r}
+
+covid_start = covid_all %>% 
+  .... #izberi začetek pandemije
+
+covid_start %>% 
+  .... %>% #izberi podatke za ves svet
+  ggplot(....)+ #nariši graf
+    ... +
+    ...
+```
+
+
+```{r}
+#Rešeno
+covid_start = covid_all %>% 
+  filter(date <= as.Date("2020-03-20"), date >= as.Date("2020-01-22")) 
+
+covid_start %>% 
+  filter(location == "World", total_cases > 0) %>% 
+  ggplot(aes(x=date, y=total_cases))+
+  geom_line() +
+  xlab("datum") + ylab("kumulativno št. primerov")
+```
+
+
+Desni del tega grafa je prilično strašen, se pa na začetku dogaja nekaj čudnega... zmerna rast, potem nagel skok, potem se malo umirja, potem spet skokovita rast... kaj se dogaja?
+
+
+### 1.2 Naloga
+
+Pandemija COVID-19 se je začela na Kitajskem. Poglejmo kaj se dogaja na Kitajskem in kaj v preostalem delu sveta v tem začetnem obdobju.
+
+a) Naredi nov dataframe `covid_world_vs_china`:
+
+  i)Naredi novo spremenljivko `is_china`, ki je "TRUE" za vse zapise za Kitajsko in "FALSE" za vse ostale zapise.
+
+  ii) Izračunaj kumulativne primere po dnevih v novo spremenljivko `cumulative_cases`, posebej za Kitajsko in posebej za prostanek sveta. **Namig** - uporabi novo narejeno `is_china`
+
+b) Znova nariši kumulativne primere, vendar tokrat posebej krivuljo (z drugo barvo) za Kitajsko in posebej za preostanek sveta. 
+   Poimenuj osi. x = "datum", y="kumulativno št. primerov".
+   Graf "pospravi" v objekt `covid_graph` in ga izriši.
+
+**Namigi**
+- Ne pozabi na lokacijo "World" - to moraš odstraniti preden delaš kaj drugega, ker bo drugače vse narobe (pomisli zakaj). :o). Prav tako so tam tudi drugi celi kontinenti... poglej kaj bi lahko uporabil/a.
+
+- spomni se, kako se v dplyr-ju grupirajo stvari. Po koliko spremenljivkah moraš grupirati?
+
+- s katerim ukazom se v dplyr-ju naredi nova spremenljivka (stolpec)?
+
+- Če dobivaš povsod NA, se spomni, kako funkcija sum() obravnava manjkajoče vrednosti.
+
+
+```{r}
+covid_world_vs_china = covid_start %>% 
+  .... %>% #odfiltriraj "World in ostalo, kar ni država"
+  .... %>% #naredi spremenljivko "is_china"
+  .... %>% #grupiraj
+  .... #sumariziraj
+
+covid_graph = ggplot(data = covid_world_vs_china) +
+           geom_.... + #ker bomo anotirali, daj estetike lokalno v geom! Ne globalno!
+           .... #poimenuj osi
+            
+
+covid_graph
+
+# 
+# covid_start %>% 
+#   filter(location == "World" | location == "China") %>% 
+#   ggplot(aes(x=date, y=total_cases, color=location)) +
+#     geom_line()
+
+```
+
+```{r}
+#Rešeno
+covid_world_vs_china = covid_start %>% 
+  filter(!is.na(continent)) %>% #odfiltriraj "World"
+  mutate(is_china = location == "China") %>% #naredi spremenljivko "is_china"
+  group_by(is_china, date) %>% #grupiraj
+  summarize(cumulative_cases = sum(total_cases, na.rm=T))#sumariziraj
+
+covid_graph = ggplot(data= covid_world_vs_china) +
+           geom_line(aes(x=date, y = cumulative_cases, color=is_china))+
+            xlab("datum") + ylab("kumulativno št. primerov")
+
+covid_graph
+
+```
+
+Ha! Čisto različni krivulji. V februarju je bila večina primerov na Kitajskem, marca pa postane vse skupaj globalen izbruh. Okrog 14. marca je število primerov izven Kitajske preseglo število primerov na Kitajskem - nekaj dni za tem, ko je WHO razglasila pandemijo. 
+
+Še nekaj drugih dogodkov se je zgodilo na začetku pandemije. Tisti velik skok v številu primerov sovpada s spremenjenim načinom poročanja (uporaba CT skenov za diagnostiko).
+
+### 1.3 Naloga
+
+Anotiraj graf `covid_graph` s ključnimi dogodki:
+
+a) Nariši črtkane navpične črte s prosojnostjo 0.5 na kritičnih datumih. 
+
+b) Napiši besedilo kritičnih dogodkov v graf. Na vsako navpično črto, na y=150000 bo približno ok (po lastni presoji). 
+
+
+
+**Namig1**: besedila imajo svoj geom, prav tako navpične črte. Ključen del znanja R-a je sposobnost, da najdeš pravo funkcijo za pravo nalogo. Google je tvoj prijatelj. Kar pogumno.
+
+**Namig2**: podatke lahko definiramo tudi za vsak geom, ne rabimo vedno uporabiti tistega, kar je definirano že v ukazu ggplot(). Torej, če želimo npr. uporabiti nove točke (iz nove tabele) v že pripravljenem grafu, lahko rečemo:
++ geom_point(data=novi_podatki, aes(x=nov_x, y= nov_y)). 
+
+**Namig3** Geom za besedilo bo potreboval tudi `y` kam napisati besedila. Ker tega ni v tabeli who_events, moraš narediti vektor z istim številom elementov sam. Spomni se funkcije rep(), lahko tudi c(). Lahko pa tudi dodate stolpec v who_event v 'tribble' ukazu spodaj (manj elegantna rešitev). Izbira je vaša.  
+
+Najprej "na hitro" naredimo tabelo z nekaj ključnimi dogodki. Za takšne malenkosti je "tribble" super ukaz. Tisti "\n" pomeni nova vrstica (velja za vsa besedila v R-u). Zaženi chunk:
+
+```{r}
+who_events <- tribble(
+  ~ date, ~ event,
+  "2020-01-30", "Razglašena\nglobalna\nnevarnost",
+  "2020-03-11", "WHO razglasi\npandemijo",
+  "2020-02-13", "Sprememba\nporočanja\nKitajska"
+) %>%
+  mutate(date = as.Date(date))
+```
+
+Zdaj pa vi. 
+
+```{r}
+#Rešeno
+covid_graph +
+  .... + #dodaj vertikalne črtkane črte
+  .... #dodaj napise
+  
+```
+
+```{r}
+#Rešeno
+covid_graph +
+  geom_vline(data=who_events, aes(xintercept=date), 
+             linetype="dashed", alpha = 0.3) + #dodaj vertikalne črtkane črte
+  geom_text(data=who_events, aes(x=date, y=150000, label = event), size = 3) #dodaj napise
+  
+```
+
+
+
+
+
+Osnoven občutek o dimenzijah problema dobimo, če pogledamo, kako hitro raste število primerov. Dober začetek je, če pogledamo, ali rastejo primeri počasneje ali hitreje kot linearno. Linearna rast je obvladljiva. Eksponentna... niti ne.
+
+### 1.4 Naloga
+
+Poglejmo najprej samo Kitajsko... po 15. februarju se zdi, da se krivulja umirja. Raziščimo trend.
+
+a) Nariši linijski graf kumulativnih primerov za Kitajsko od 15. februarja dalje.
+b) Nariši trend. Uporabi linearni model. 
+
+**Namig**: ggplot ima geom za risanje trendov v grafe. Poglej parametre geoma, da ugotoviš, kako se nastavi linearni model.
+
+```{r}
+#Rešeno
+covid_world_vs_china %>% 
+  .... %>% #filtriraj Kitajsko po 15. februarju
+  ggplot(aes(x=date, y=cumulative_cases))+ 
+    ....+ #nariši linijski graf
+    .... #nariši trend, uporabi linearni model
+```
+
+
+```{r}
+#Rešeno
+covid_world_vs_china %>% 
+  filter(is_china == T, date > as.Date("2020-02-15")) %>% #filtriraj Kitajsko po 15. februarju
+  ggplot(aes(x=date, y=cumulative_cases))+ 
+    geom_line()+ #nariši linijski graf
+    geom_smooth(method="lm") #nariši trend, uporabi linearni model
+```
+
+Zgleda, kot da se umirja. Kaj pa svet?
+
+### 1.5 Naloga
+
+Zdaj pa nariši isti graf za preostali svet razen Kitajske. Prav tako nariši linearni model.
+
+```{r}
+#Tvoja koda tukaj.
+```
+
+
+
+```{r}
+#Rešeno
+covid_world_vs_china %>% 
+  filter(is_china == F, date > as.Date("2020-02-15")) %>% #filtriraj Kitajsko po 15. februarju
+  ggplot(aes(x=date, y=cumulative_cases))+ 
+    geom_line()+ #nariši linijski graf
+    geom_smooth(method="lm") #nariši trend, uporabi linearni model
+```
+
+Tole pa ne zgleda preveč optimistično. Očitno število primerov ne raste linearno. Kako pa bi to zgledalo, če bi bil y na eksponentni skali?
+
+### 1.6 naloga
+
+Spremeni graf za preostali svet razen Kitajske od prej, tako da bo y os na logaritemski skali.
+
+**Namig**: v ggplot-u je enostaven ukaz za spreminjanje osi.
+
+```{r}
+#Tvoja koda tukaj
+```
+
+```{r}
+#Rešeno
+covid_world_vs_china %>% 
+  filter(is_china == F, date > as.Date("2020-02-15")) %>% #filtriraj Kitajsko po 15. februarju
+  ggplot(aes(x=date, y=cumulative_cases))+ 
+    geom_line()+ #nariši linijski graf
+    geom_smooth(method="lm") +#nariši trend, uporabi linearni model
+    scale_y_log10()
+```
+
+Logaritemska transformacija y osi nam naredi precej lepši "fit" linearnega modela. Lepo z vidika analize, ne pa preveč lepo z vidika človeštva. Tako zgleda eksponentna rast primerov. Ko se Kitajska umirja, začne število okužb v preostalem svetu rasti eksponentno. 
+
+Tako se je torej začela pandemija... ampak, ali se to še vedno nadaljuje? 
+
+### 1.7 Naloga
+
+Uporabi izvorne podake, filtriraj "World" in nariši kumulativno število okužb z COVID-19, z linearnim trendom, od začetka beleženja okužb do danes (dva grafa):
+
+a) na linearni skali,
+b  na logaritemski skali.
+
+```{r}
+#Tvoja koda tukaj
+```
+
+
+```{r}
+#Rešeno
+covid_all%>% 
+  filter(location == "World") %>% #filtriraj "World"
+  ggplot(aes(x=date, y=total_cases))+ 
+    geom_line()+ #nariši linijski graf
+    geom_smooth(method="lm") #+ #+ #nariši trend, uporabi linearni model
+    #ylim(0, 2.5e8)
+
+covid_all%>% 
+  filter(location == "World") %>% #filtriraj "World"
+  ggplot(aes(x=date, y=total_cases))+ 
+    geom_line()+ #nariši linijski graf
+    geom_smooth(method="lm") + #nariši trend, uporabi linearni model
+    scale_y_log10()
+```
+
+Vidimo, da je število okužb globalno najprej rastlo eksponentno, ampak nekoliko počasneje kot na začetku. Nekje v začetku leta 2021 se začne trend počasi obračati, potem pa dva ponovna skoka v 2022 in umirjanje v 2023.
+
+```{r}
+covid_world_vs_china2 = covid_all %>% 
+  filter(!is.na(continent),
+         !is.na(total_cases)) %>% #odfiltriraj "World"
+  mutate(is_china = location == "China") %>% #naredi spremenljivko "is_china"
+  group_by(is_china, date) %>% #grupiraj
+  summarize(cumulative_cases = sum(total_cases, na.rm=T),
+            new_vaccinations = sum(new_vaccinations, na.rm=T)) %>% #sumariziraj
+  mutate(total_vaccinations = cumsum(new_vaccinations))
+
+covid_graph2 = ggplot(data= covid_world_vs_china2) +
+           geom_line(aes(x=date, y = cumulative_cases, color=is_china))+
+           geom_line(aes(x=date, y=total_vaccinations/10, color=is_china), linetype="dashed")+
+            xlab("datum") + ylab("kumulativno št. primerov")
+
+covid_graph2
+```
+
+
+
+
+
+
+_________________________
+
+# 3. Globalni potek pandemije - kje, kako in (malo) zakaj
+
+Po 11. marcu, ko je COVID-19 dobil globalne razsežnosti, je različnim državam šlo različno dobro (ali različno slabo). Poglejmo, ali lahko ugotovimo kje so razlike in (morda) kaj bi lahko vplivalo na njih.
+
+Najprej ugotovimo, katere države so najbolj prizadete. 
+
+### 3.1 Naloga
+
+Najdi prvih sedem držav z največjim številom skupnih primerov. Ne pozabi odstraniti "World" in kontinentov... :)
+
+```{r}
+#Rešeno
+covid_all %>% 
+  filter(!is.na(continent)) %>% 
+  group_by(location) %>% 
+  summarize(all_cases = max(total_cases, na.rm=T)) %>% 
+  slice_max(order_by=all_cases, n=7)
+  
+```
+
+V večini primerov gre za velike države... morda skupno število primerov ni najboljša metrika. Razmisli... kaj bi bilo verjetno bolje uporabiti?
+
+
+### 3.2. Naloga
+
+Najdi prvih 5 držav z največjim številom primerov na milijon prebivalcev. Izloči zelo majhne države (manj kot milijon prebivalcev). Zapiši imena držav in število primerov na miljon prebivalcev v njih v nov dataframe `worst_covid`.
+
+```{r}
+#Rešeno
+worst_covid = covid_all %>% 
+  filter(!is.na(continent), population > 1000000) %>% 
+  group_by(location) %>% 
+  summarize(cases_per_million = max(total_cases_per_million, na.rm=T)) %>% 
+  slice_max(order_by=cases_per_million, n=5)
+
+worst_covid
+```
+
+Juhu, pa smo le nekje na vrhu! 
+
+
+### 3.3 Naloga
+
+a) Naredi nov dataframe `worst_covid_data`, v katerega zapiši vse podatke iz `covid_all` za pet najbolj prizadetih držav (worst_covid).
+
+b) Nariši graf skupnega števila okuženih (na milijon prebivalcev) po dnevih od začetka epidemije v državi, s svojo črto za vsako od teh držav. Nariši dva grafa, z linearno in logaritemsko skalo.
+
+```{r}
+worst_covid_data = covid_all %>% 
+  ....
+
+ggplot(worst_covid_data, ....)+
+  ....
+
+ggplot(worst_covid_data, ....)+
+  ....
+  ....
+
+```
+
+
+```{r}
+#rešeno
+worst_covid_data = covid_all %>% 
+  filter(location %in% worst_covid$location)
+
+ggplot(worst_covid_data, aes(x=date, y=total_cases_per_million, color=location))+
+  geom_line()
+
+ggplot(worst_covid_data, aes(x=date, y=total_cases_per_million, color=location))+
+  geom_line()+
+  scale_y_log10()
+
+```
+
+
+No, ne gre nam najbolje.
+
+Poglejmo še število smrti na milijon prebivalcev... morda je boljša metrika, ker je manj odvisna od pristopov k testiranju.
+
+
+
+### 3.4 Naloga
+
+Najdi sedem držav z največjim številom smrtnih primerov na miljon prebivalcev. Nariši graf skupne smrtnosti.
+
+**Namig** Skoraj isto kot prej, ampak drug parameter. Copy/paste je tvoj prijatelj.
+
+```{r}
+worst_covid_deaths = covid_all %>% 
+  ... 
+
+worst_covid_deaths
+
+worst_covid_deaths_data = covid_all %>% 
+ ...
+
+ggplot(worst_covid_deaths_data,....)+
+  ....
+
+```
+
+```{r}
+#Rešeno
+worst_covid_deaths = covid_all %>% 
+  filter(!is.na(continent), population > 1000000) %>% 
+  group_by(location) %>% 
+  summarize(deaths_per_million = max(total_deaths_per_million, na.rm=T)) %>% 
+  slice_max(order_by=deaths_per_million, n=7)
+
+worst_covid_deaths
+
+worst_covid_deaths_data = covid_all %>% 
+  filter(location %in% worst_covid_deaths$location)
+
+ggplot(worst_covid_deaths_data, aes(x=date, y=total_deaths_per_million, color=location))+
+  geom_line()
+
+```
+
+Kaj je s Perujem? Zakaj tako odstopa? Google!
+
+Kaj se je pa dogajalo s cepljenji v teh državah?
+
+```{r}
+covid_all %>%
+  #filter(location %in% c("Germany", "Peru")) %>% 
+  filter(location == "World") %>% 
+  ggplot(aes(x=date, color = location)) +
+    geom_line(aes(y=new_deaths_smoothed))+
+    geom_line(aes(y=people_vaccinated_per_hundred*100), linetype = "dashed")
+```
+
+
+```{r}
+covid2023 = covid_all %>%
+  filter(date >= as.Date("2023-01-01")) 
+
+
+worst_death_2023 = covid2023 %>% 
+  filter(!is.na(continent)) %>% 
+  group_by(location) %>% 
+  summarise(deaths = sum(new_deaths, na.rm=T)) %>% 
+  slice_max(order_by = deaths, n=10)
+```
+
+
+### 3.5 Naloga
+
+Nariši linijske grafe števila okužb na miljon za vse države, vse z isto barvo. Naredi črte prosojne, da bolje vidiš kaj se dogaja.
+```{r}
+#Tvoja koda tukaj
+```
+
+
+```{r}
+#Rešeno
+ggplot(covid_all, aes(x=date, y=total_cases_per_million, group=location))+
+  geom_line(alpha = 0.25)
+```
+Hmm... precejšnje razlike, nekaj čudnih krivulj... Kaj bi bili lahko vzroki za tako različne krivulje **zaznanih** okužb?
+
+### 3.6 Naloga
+
+a) V skupini razmislite in prediskutirajte, kaj bi lahko vplivalo na zaznano število okužb v posamezni državi? Ali bi nam lahko katera od spremenljivk v `covid_all` kaj razložila?
+
+b) Najdi dve spremenljivki, ki po vašem mnenju najbolje razlagata razlike v rasti števila zaznanih okužb med državami. Prejšnji graf obarvaj po teh spremenljivkah (nariši dva grafa).
+
+**Namig** Barvno lestvico lahko spremeniš z scale_color_... Imamo diskretne in zvezne lestvice... razišči scale_color_gradient().
+
+```{r}
+#Tvoja koda tukaj
+```
+
+
+```{r}
+#Rešeno
+ggplot(covid_all, aes(x=date, y=total_cases_per_million, group=location))+
+  geom_line(alpha = 0.25, aes(color=human_development_index))+
+  scale_color_gradient(low="red", high="green", n.breaks=8)
+```
+
+Kaj misliš, zakaj vidiš slike, ki jih vidiš?
+
+Morda pa število okužb zaradi zelo različnih režimov testiranja ni najbojša metrika?
+
+### 3.7 Naloga
+
+Nariši graf števila smrti na milijon prebivalcev, po dnevu od začetka epidemije v državi. Spet pobarvaj po spremenljivkah, za katere meniš, da razlagajo razlike med državami.
+
+```{r}
+#Tvoja koda tukaj
+```
+
+
+```{r}
+#Rešeno
+ggplot(covid_all, aes(x=date, y=total_deaths_per_million, group=location))+
+  geom_line(alpha = 0.25, aes(color=human_development_index))+
+  scale_color_gradient(low="red", high="green", n.breaks=8)
+```
+
+Vaccines?
+
+```{r}
+
+```
+
+

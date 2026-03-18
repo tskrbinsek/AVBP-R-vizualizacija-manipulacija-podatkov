@@ -1,0 +1,203 @@
+---
+title: "03 - Oblikovanje podatkov"
+output: html_notebook
+---
+
+```{r setup}
+library(tidyverse)
+library(babynames)
+
+# Podatki za igranje
+cases <- tribble(
+  ~Country, ~"2011", ~"2012", ~"2013",
+      "FR",    7000,   6900,    7000,
+      "DE",    5800,    6000,    6200,
+      "US",   15000,   14000,   13000
+)
+
+pollution <- tribble(
+       ~city, ~size, ~amount,
+  "New York", "large",      23,
+  "New York", "small",      14,
+    "London", "large",      22,
+    "London", "small",      16,
+   "Beijing", "large",     121,
+   "Beijing", "small",     56
+)
+
+x <- tribble(
+  ~x1, ~x2,
+  "A",   1,
+  "B",  NA,
+  "C",  NA,
+  "D",   3,
+  "E",  NA
+)
+
+# Malenkost, da ne bo zmede
+names(who) <- stringr::str_replace(names(who), "newrel", "new_rel")
+```
+
+## Naloga 1
+
+Na list papirja napiši/nariši, kako bi podatki zgledali, če bi bile vrednosti združene v tri stolpce:  **country**, **year**, **n**
+
+## Naloga 2
+
+Uporabi `pivot_longer()` in uredi tabelo `table4a` v tri stolpce:  **country**, **year**, and **cases**.
+
+```{r}
+cases %>% 
+  pivot_longer(cols = -Country, names_to = "Year", values_to = "n")
+```
+
+
+## Naloga 3
+
+Na kos papirja nariši/napiši, kako bi zgledali ti podatki, če bi bile vrednosti združene v tri stolpce: **city**, **large**, **small**
+
+
+## Naloga 4
+
+Uporabi `pivot_wider()` in preoblikuj `table2` v štiri stolpce: **country**, **year**, **cases** in **population**.
+
+```{r}
+table2 %>% pivot_wider(names_from = type, values_from = count)
+```
+
+## Naloga 5
+
+Obrni stolpce od 5 do 60 data frame-a ‘who’ v dva stolpca po imenu `codes` in `n`. Potem izberi samo spremenljivke (stolpce) `county`, `year`, `codes` in `n`.
+
+
+```{r}
+who %>% 
+  pivot_longer(cols = 5:60, names_to = "codes", values_to = "n") %>% 
+  select(-iso2, -iso3) #%>% 
+  #separate(codes, into = c("new", "type", "sexage"), sep = c(4,7))
+
+```
+
+## Naloga 6
+
+Razcepi stolpec `sexage`  na stolpca `sex` in `age`.
+
+```{r}
+who %>% 
+  pivot_longer(cols = 5:60, names_to = "codes", values_to = "n") %>% 
+  select(-iso2, -iso3) %>% 
+  separate(codes, into = c("new", "type", "sexage"), sep = "_") %>% 
+  select(-new) %>% 
+  separate(sexage, into = c("sex", "age"), sep=1)
+
+```
+
+
+Zdaj pa zares. :)
+
+Pogledali bomo podatke o imenih Statističnega urada Republike Slovenije in izračunali delež deklic rojenih vsako leto.
+
+Podatki SURS - zaženite in včitajte podatke, potem jih poglejte.
+```{r}
+imena_SISTAT = read_tsv("SLO_Imena_SURS2020.txt")
+```
+
+
+## Naloga 7
+
+Uredite podatke SISTAT-a o imenih. 
+
+Spomnite se pravil za urejene podatke. Predebatirajte s kolegi. 
+
+Uporabite `leto` za leto in `n` za število. Ali se lahko že mimogrede znebite tistega "Num" pred letnicami? Malo poglejte 'help' za funkcijo, ki ste jo uporabili.
+
+```{r}
+imena_SISTAT %>% 
+  pivot_longer(cols = 3:30, names_to = "leto", 
+               values_to = "n", names_prefix = "Num") 
+```
+
+## Naloga 8
+
+Še ena neprijetnost, pri `n` je "-", kjer bi moralo biti 0. 
+
+a) V 'n' zamenjaj "-" z 0. 
+Obstaja funkcija, Google je tvoj prijatelj. Se spomniš s katerim dplyr ukazom se 'izračuna' nov stolpec? Če mu daš ime `n`, se bo preprosto prepisal preko prejšnjega `n` (pravzaprav "popraviš" `n`)
+
+b) Kak tip podatka je `n`? Kaj pa `leto`? Lahko ta tip podatka seštevaš/odštevaš? Spremeni v kakšen bolj uporaben tip podatka.Namig... številke bi bile kar v redu. :)
+
+Namig... kopiraj kodo od zgoraj, potem pa samo nadaljuj s pipe-om %>%
+
+```{r}
+imena_SISTAT %>% 
+  pivot_longer(cols = 3:30, names_to = "leto", 
+               values_to = "n", names_prefix = "Num") %>% 
+  mutate(n = as.numeric(replace(n, n == "-", 0)), 
+         leto = as.numeric(leto)) 
+```
+
+## Naloga 9
+
+Izračunaj število vseh deklic in vseh dečkov v vsakem letu. Stolpcu daj ime ‘skupaj’.
+Spomeni se kako se kategorije grupirajo v dplyr-u in kako se računajo povzetki.
+
+```{r}
+imena_SISTAT %>% 
+  pivot_longer(cols = 3:30, names_to = "leto", 
+               values_to = "n", names_prefix = "Num") %>% 
+  mutate(n = as.numeric(replace(n, n == "-", 0)), 
+         leto = as.numeric(leto)) %>% 
+  group_by(leto, spol) %>% 
+  summarise(skupaj = sum(n)) 
+  
+```
+
+## Naloga 10
+
+Izračunaj delež deklic med vsemi otroci v vsakem letu posebej. Stolpcu daj ime `pDeklic`.
+
+Prediskutiraj s kolegi, kako bi se tega lotil (a). Kako se izračuna delež? Bi bilo lažje, če bi imeli dečki in deklice vsaki svoj stolpec? 
+```{r}
+imena_SISTAT %>% 
+  pivot_longer(cols = 3:30, names_to = "leto", 
+               values_to = "n", names_prefix = "Num") %>% 
+  mutate(n = as.numeric(replace(n, n == "-", 0)), 
+         leto = as.numeric(leto)) %>% 
+  group_by(leto, spol) %>% 
+  summarise(skupaj = sum(n)) %>%
+  pivot_wider(names_from = spol, values_from = skupaj) %>% 
+  mutate(pDeklic = Deklica/(Decek + Deklica))
+  
+```
+
+Zdaj pa uporabi ggplot2 in nariši, kako se je delež deklic spreminjal po letih. 
+```{r}
+imena_SISTAT %>% 
+  pivot_longer(cols = 3:30, names_to = "leto", 
+               values_to = "n", names_prefix = "Num") %>% 
+  mutate(n = as.numeric(replace(n, n == "-", 0)), 
+         leto = as.numeric(leto)) %>% 
+  group_by(leto, spol) %>% 
+  summarise(skupaj = sum(n)) %>%
+  pivot_wider(names_from = spol, values_from = skupaj) %>% 
+  mutate(pDeklic = Deklica/(Decek + Deklica)) %>% 
+  ggplot(aes(x=leto, y=pDeklic))+
+    geom_line()
+
+```
+
+
+
+
+# Za domov...
+
+Podatke lahko dobimo v različnih oblikah, ampak R ima rad samo eno:  _urejene podatke_.
+
+Podatki so urejeni če in samo če:
+1. Je vsaka spremenljivka v svojem stolpcu
+2. Je vsak zapis v svoji vrstici
+3. Je vsaka vrednost v svoji celici
+
+Kaj so točno spremenljivke in kaj zapisi je v določeni meri odvisno od vašega trenutnega cilja.
+
+

@@ -1,0 +1,448 @@
+---
+title: "Bioinformatika - R, vaja 1: Prvi koraki"
+author: "Tvoje Ime"
+date: ""
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+TOLE JE MIŠLJENO KOT HITRA OSVEŽITEV OSNOVNIH KONCEPTOV R-A, ČE SI VSE POZABIL/A!
+
+##Prvi koraki
+
+###R Studio != R
+('!=' pomeni v R-u logični operator "ni enako")
+
+R Studio je *okolje*, ki nam olajša delo z R-om. "Pravi" R vidite v konzoli spodaj.
+
+Tole je "Markdown" dokument - kombinacija besedila (npr. opisa analize) in R-kode, ki se "zaštrika" (knit) v skupen dokument.
+Besedilo je lahko kar koli - so pa posebni ukazi za formatiranje. Bomo pogledali na koncu.
+
+R kodo pišete v *"chunk"-e* - kose kode, ki naredijo en smiseln korak ali proizvedejo določen rezultat. Chunk naredimo tako, da stisnemo ctrl-alt-i (lahko ga tudi na roke natipkamo - začne se s tremi črticami nazaj (`) in konča na isti način).
+
+Poskusite narediti chunk:
+
+Tole je chunk po imenu chunk2:
+```{r chunk2}
+#tole je komentar - v R-ju so komentarji vse vrstice, ki se začnejo z lojtro (#)
+#ko pišete R kodo, jo komentirajte - tako boste naslednji dan (teden, mesec, leto...) morda
+#vedeli kaj ste počeli. :)
+
+#Tole bo pa nekaj narisalo:
+plot(pressure)
+```
+
+Če postavite kurzor na ukaz, ki bi ga radi zagnali (v tem primeru 'plot') in pritisnete <ctrl-enter>, bo ukaz šel v konzolo (spodaj) in se izvedel. Če s kurzorjem kjer koli v "chunk"-u pritisnete <ctrl-shift-enter>, bo R izvedel celoten "chunk". Lahko uporabiš tudi "Run" meni zgoraj desno.
+
+*Naloga* Poskusi pognati chunk2 na več načinov. Zaženi samo vrstico z ukazom 'plot'.
+
+Če se izgubite, imate "plonk" v menijih zgoraj: Help/Cheat Sheets/R Studio IDE
+
+Zdaj pa zares na učenje R-a. :)
+
+##R KOT KALKULATOR
+
+R je *interaktiven* - pomeni, da lahko natipkate ukaz in takoj dobite rezultat. Tako izvajate analizo korak po korak. 
+
+*Naloga* V konzolo spodaj natipkaj '3+4' in pritisni <enter>. Kaj se zgodi?
+
+*Naloga* Izračunaj površino kroga s polmerom r=20 cm. (namig: pi = pi, za potence se uporablja ^ (desni <alt> in 3)).
+
+Ker je R programski jezik, si pogosto želimo rezultat neke operacije shraniti za kasnejšo uporabo. Z operatorjem '<-' naredimo *objekt*, v katerega spravimo rezultat.
+
+Ker bi radi imeli zapis našega dela, bomo delali v "chunk"-ih in ne neposredno v konzoli. Še enkrat, <ctrl-enter> pošlje v konzolo trenutno vrstico, <ctrl-shift-enter> pa ves "chunk".
+
+*Naloga* Zdaj izračunajte površino kroga od prej in to shranite v spremenljivko (objekt) 'p'.
+```{r chunk3}
+
+```
+
+Operator '<-' lahko razumete kot puščico, ki kaže, kam se bo vrednost zapisala. Namesto tega lahko uporabite tudi enačaj '='.
+
+Ko ste spravili rezultat v spremenljivko, se v konzoli ni izpisalo nič. R predpostavi, da rezultata ne želite takoj videti, ampak ga želite shraniti za kaj drugega kasneje.
+
+*Naloga* Če želite izpisati vrednost spremenljivke, napišite ime spremenljivke in pošljite v konzolo.
+```{r}
+
+```
+
+S spremenljivkami lahko računamo. Zdaj imamo v spremenljivki p površino kroga v cm^2. 
+
+*Naloga* Izračunaj iz spremenljivke p površino kroga v m^2 in jo spravi v spremenljivko p1. Potem izpiši spremenljivko p1.
+```{r}
+
+```
+
+
+*Naloga* V konzoli poskusite ispisati p1, tako da napišete P1 (z veliko črko P). Kaj se zgodi? Poskusite še z malo črko p.
+
+
+
+##OSNOVNO IGRANJE S PODATKI
+
+Če bi delali samo s posameznimi vrednostmi, bi kmalu postalo dolgčas. :) Da bi razumeli shranjevanje podatkov, bomo "na roke" vtipkali en majhen set podatkov, s katerim se bomo igrali. Uporabili bomo podatke iz literature  - majhen izsek morfometričnih podatkov o vrabcih - dolžino krila, noge, glave in telesno težo.
+
+Gremo najprej napisati dolžino krila (Wingcrd) v posamezne spremenljivke.
+
+*Naloga* odpri sliko BirdData.png in dopolni v spodnjem chunk-u podatke iz stolpca "Wingcrd" do konca, potem poženi chunk.
+
+```{r}
+a = 59
+b = 55
+c = 53.5
+d = 55
+e = 52.5
+
+#namesto tega besedila dopolni še f, g in h
+```
+Kot vidite, namesto '<-' lahko uporabljamo '=' - stvar osebnega okusa, kaj vam je bolj všeč.
+
+*Diskusija* Podatke imamo sicer vpisane... ampak bi si želeli še kaj več?
+
+S temi podatki lahko zdaj računamo.
+
+
+Za primer smo v prvi vrstici kode sešteli vse dolžine kril od a do h. *Naloga:* Kakšna je razlika v dolžini krila pri osebku a in osebku b? Izračunaj povprečno dolžino krila vseh osebkov. Zraven v chunk piši komentarje, kaj vsaka vrstica kode naredi.
+```{r}
+#seštevek vseh dolžin kril
+a+b+c+d+e+f+g+h
+#dalje TVOJA koda in komentarji. :)
+
+
+```
+
+S spremenljivkami lahko enostavno računamo, isto kot če bi vtipkali številke. Kljub temu pa potrebujemo kaj boljšega, če želimo delati s podatki iz realnega sveta.
+
+
+## VEKTORJI
+
+OBJEKTI v R-u lahko vsebujejo funkcije in podatke (lahko tudi oboje hkrati). Predstavljate si jih lahko kot škatlice, v katere lahko spravite kar koli. Objekti s podatki so *podatkovne strukture*. Najenostavnejša podatkovna struktura v R-u je *numerični vektor*. 
+
+Tako bi bil videti numerični vektor dolžin kril od malo prej:
+59 55 53.5 55 52.5 57.5 53 55
+
+Tudi posamezna številka, shranjena v objekt (kot naš 'p'), je pravzaprav vektor z enim samim elementom.
+
+
+
+###OSNOVE VEKTORJEV
+
+Najenostavnejši način za izdelavo vektorja je funkcija c(). FUNKCIJE so v R-u orodja, s katerimi naredimo neko nalogo. Vedno imajo oklepaj in zaklepaj, med katerima funkciji povemo, kaj želimo z njo narediti. Naredimo vektor dolžine kril:
+```{r}
+Wingcrd <-  c(59, 55, 53.5, 55, 52.5, 57.5, 53, 55)
+```
+
+Lahko bi tudi naredili isto iz naših spremenljivk od prej.
+```{r}
+Wingcrd1 <-  c(a,b,c,d,e,f,g,h)
+```
+
+Zdaj lahko oboje izpišemo.
+```{r}
+Wingcrd
+Wingcrd1
+```
+Kot vidimo, sta vektorja identična.
+
+Če vas zanima, kako posamezna funkcija deluje, je vedno na voljo pomoč. Ukaz ?ime_funkcije izpiše pomoč za to funkcijo.
+
+*Naloga* Poskusite najti pomoč za funkcijo c() (v konzoli spodaj). 
+
+*Naloga* Naredi še vektorje za ostale stolpce: Tarsus, Head in Wt.
+```{r}
+#Prva dva stolpca sta že vpisana, da ne izgubljamo časa.
+Tarsus <-  c(22.3, 19.7, 20.8, 20.3, 20.8, 21.5, 20.6, 21.5)
+Head <-  c(31.2, 30.4, 30.6, 30.3, 30.3, 30.8, 32.5, NA)
+#Vpiši še stolpec s težo, spremenljivki daj ime Wt. 
+
+
+
+```
+
+V vektorju 'Head' je zadnja vrednost NA. Kakšna ideja kaj bi to bilo?
+
+Z vektorji enostavno računamo - operacija se izvede na vsakem elementu vektorja. Napiši Head*2+100 v konzolo. Kaj se zgodi?
+
+*Naloga* Dolžina krila je merjena v mm. Pretvori v cm in spravi v spremenljivko Wingcrd.cm. Izpiši spremenljivko.
+```{r}
+Wingcrd.cm <- Wingcrd/10 #pretvorba iz mm v cm
+```
+
+Računske operacije lahko izvajamo tudi med vektorji. 
+
+*Naloga* Gremo na primer za vsak osebek izračunati dva (ad-hoc) indeksa - razmerje med telesno težo in dolžino noge (body.index1) in razmerje med telesno težo in velikostjo glave (body.index2). Izpiši rezultate.
+```{r}
+#Razmerje med telesno težo in dolžino noge
+
+
+#Razmerje med telesno težo in velikostjo glave
+
+
+```
+
+
+
+Z vektorji je mogoče izvajati tudi "navpične" operacije preko celega vektorja.
+
+*Naloga* 
+1) Izračunajte povprečno težo vrabcev (Wt) in njeno standardno deviacijo (funkcije: mean, sd). 
+
+2) Funkcija 'summary' enostavno povzame glavne lastnosti podatkovnega objekta - poskusite na teži vrabcev. 
+
+3) Kakšna je maksimalna velikost glave (Head) vrabcev - poskusi sam najti funkcijo. 
+
+```{r}
+#Tukaj tvoja koda... 
+
+
+
+```
+
+Kaj se je zgodilo pri velikosti glave? Kako bi to rešili? (Namig: poglej pomoč za ukaz in razmisli).
+
+
+
+Poglej pomoč za manjkajoče vrednosti (NA). Različne funkcije imajo različne načine, kako rešijo manjkajoče vrednosti - običajno se splača pogledati pomoč za specifično funkcijo.
+
+*Naloga* Tokrat zares določi maksimalno velikost glave.
+```{r}
+
+```
+
+
+Bilo bi zelo priročno, če bi lahko iz vektorja dobili posamezne vrednosti. To naredimo z oglatimi oklepaji [].
+```{r}
+#Teža prvega vrabca
+Wt[1]
+
+#Teža drugega vrabca
+Wt[2]
+
+#Teža vseh vrabcev razen tretjega
+Wt[-3]
+
+#Teža prvih štirih vrabcev
+Wt[c(1,2,3,4)]
+
+#...isto kot prejšnji, malo drugače
+index = c(1,2,3,4)
+Wt[index]
+```
+
+Zadnji ukaz ima dva koraka: s funkcijo c() smo naredili vektor - sekvenco pozicij, potem pa vrednosti s teh pozicij izvlekli iz vektorja.
+
+*Naloga* Izračunaj povprečno težo zadnjih treh vrabcev. Dolžino vektorja lahko ugotoviš tudi s funkcijo length()
+```{r}
+
+
+
+```
+
+
+
+Kot vidiš, je v R-u koristno, če lahko delaš sekvence, s katerimi lahko dobiš določene pozicije iz podatkovnih objektov. Za to je precej orodij, najbolj enostavno je ':'. 
+
+```{r}
+#Generiraj sekvenco številk od 1:10
+1:10
+
+#NALOGA: 
+#Generiraj sekvenco številk od 10 do 1. Še eno od 30 do 50.
+
+```
+
+Tako lahko enostavno "izvlečemo" težo prvih štirih vrabcev od zgoraj:
+```{r}
+#prvi štirje vrabci
+Wt[1:4]
+
+#prvi štirje in osmi vrabec
+Wt[c(1:4,8)]
+```
+
+R ima še veliko orodij za izdelavo sekvenc, ki jih boste bolje spoznali pri domači nalogi in jih bomo obdelali naslednjič. :)
+
+
+###IZ VEKTORJEV PROTI TABELAM
+
+Podatki vrabcev so med seboj nedeljivo povezani - na istih pozicijah so meritve za iste živali. Priročno bi bilo, če bi lahko vse skupaj spravili v isti podatkovni objekt. Še bolj praktično bi bilo, če bi lahko iz tega naredili nam bolj domačo tabelo - vsak parameter v svojem stolpcu. Nič lažjega, s funkcijo cbind(). 
+
+```{r}
+BirdData2 = cbind(Wingcrd, Tarsus, Head, Wt)
+BirdData2
+```
+
+
+Ime cbind() prihaja iz "column bind", ali "zlepi stolpce". Verjetno lahko uganete, kaj dela rbind? :) Poskusi narediti BirdData3 s funkcijo rbind() in poglej rezultat.
+```{r}
+BirdData3 = rbind(Wingcrd, Tarsus, Head, Wt)
+BirdData3
+```
+
+
+Formalni pravokotni tabeli se v R-u reče 'data frame' in v njej ima vsak stolpec svoje ime. Naredimo jo s funkcijo data.frame().
+
+```{r}
+BirdData.DF = data.frame(WC=Wingcrd,TS=Tarsus, Head, Wt)
+```
+
+
+Pri tem smo prva dva stolpca preimenovali, dva pa smo pustili isto ime, kot je bilo ime vektorja. 
+
+Do posameznega stolpca lahko dostopamo z znakom '$':
+tako nam npr. BirdData.DF$Head vrne vektor vrednosti iz stolpca 'Head'.
+
+
+*Naloga* Izpiši data frame, ki smo ga pravkar naredili. Izpiši prve tri vrednosti iz stolpca 'Head' (namig: podobno smo počeli prej z 'golim' vektorjem in oglatimi oklepaji).
+```{r}
+
+```
+
+
+Data frame-e lahko poljubno "masiramo" - iz njih dobimo tiste vrstice in/ali stolpce, ki jih želimo. Splošna oblika za priklic podatkov je ime.data.frama[vrstice,stolpci].
+
+Nekaj primerov:
+```{r}
+BirdData.DF[1:6,1:2]#prvih šest vrstic, prva dva stolpca
+BirdData.DF[,c(1,2)] #vse vrstice, prva dva stolpca (tista vejica pred 'c' je pomembna!)
+BirdData.DF[,c("WC","TS")] #identično kot prejšnja vrstica, le da smo dali imena stolpcev.
+BirdData.DF[1:4,]#prve štiri vrstice, vsi stolpci
+```
+
+
+
+*Naloga* 
+1) Izpiši vse vrstice stolpcev 'Head' in 'Wt'.
+2) Izpiši vse stolpce za zadnji dve vrstici.
+```{r}
+
+```
+
+Za konec še malo vzdrževalnih del. Funkcija ls() izpiše vse objekte, s katerimi trenutno delamo. *Naloga:* Poskusi. 
+
+Funkcija rm() odstrani objekte. *Naloga:* Poskusi rm(a, b, c, d).
+
+Celotno delovno okolje ("workspace") počistimo z ukazom rm(list=ls()). *Naloga:* Uporabi in poskusi razložiti, kaj se zgodi.
+
+Dobro, zdaj imamo orodja, da lahko analiziramo naše prve dejanske podatke.
+
+
+
+
+#HITRA IN POVRŠNA ANALIZA PODATKOV O LIGNJIH
+
+Najprej naložimo podatke - tokrat iz datoteke 'squid.txt", ki se nahaja v našem delovnem folderju. Več o uvažanju podatkov prihodnjič.
+```{r}
+squid = read.table("squid.txt", header=T)
+```
+
+*Nekaj o podatkih* (neposredno): This is a set of data on the Gonadosomatic index (GSI, i.e., the weight of the gonads relative to total body weight) of squid (Graham Pierce, University of Aberdeen, UK, unpublished data). Measurements were taken from squid caught at various locations in Scottish waters in different months and years.
+
+Najprej bomo na hitro pogledali podatke.
+```{r}
+#funkcija names() nam pove imena stolpcev, str() nam pove strukturo podatkov. Dobro jo je vedno zagnati po uvozu podatkov, da preverimo, ali se je zgodila kakšna neumnost.
+names(squid)
+str(squid)
+```
+
+
+Pogosto nas bo zanimal samo del podatkov - npr. podatki samo o samicah. Najprej moramo razumeti, kako so podatki kodirani. Poglejmo spol.
+```{r}
+squid$Sex #zgleda kot 1 in 2
+unique(squid$Sex) #res je 1 in 2
+```
+
+Funkcija unique() nam pove unikatne vrednosti - tukaj sta dejansko dve, 1 za samce in 2 za samice (kar smo prebrali v opisu podatkov).
+
+Lahko si pripravimo podatke samo o samcih.
+```{r}
+sel <- squid$Sex == 1
+#poglej v konzoli, kaj smo dobili!
+
+squidM = squid[sel,] #podatki samo za samce - poglej v konzoli
+squidM <- squid[squid$Sex == 1,]
+```
+
+
+Kot vidimo, lahko postavimo tudi logične pogoje, katere zapise želimo. 
+
+Osnovni logični ukazi v R-u:
+enakost ( == )
+ni enako ( != )
+večje, večje ali enako ( >, >=)
+manjše, manjše ali enako (<, <=)
+logični 'ali' ( | )
+logični 'in'  ( & )
+
+
+*Naloga* Pripravi tabelo squidF samo za samice.
+```{r}
+
+```
+
+Spol in lokacija sta v podatkih zapisana kot številki, čeprav so podatki dejansko nominalni. Nominalnim spremenljivkam pravimo tudi 'FAKTORJI'. Če R-u povemo, da je neka spremenljivka faktor, bo to pravilno upošteval v analizah in grafih.
+
+```{r}
+squid$LocationF = factor(squid$Location)
+squid$SexF = factor(squid$Sex)
+str(squid)
+```
+
+
+Faktorji imajo vrednosti, ki se ponavljajo - v tem primeru samec in samica. Temu pravi R 'levels' in jih lahko poimenujemo.
+```{r}
+levels(squid$SexF)
+levels(squid$SexF)=c("Male","Female")
+head(squid)
+```
+
+
+Običajno najprej zrišemo podatke. Več o risanju grafov naslednjič, tokrat le za pokušino.
+```{r}
+hist(squid$GSI) #na hitro histogram. Ni zelo informativno.
+boxplot(GSI~SexF, data=squid)
+```
+
+Ni videti velikih razlik. Ampak morda moramo vseeno pogledati podrobneje.
+
+Poglejmo še učinek meseca vzorčenja.
+```{r}
+library(lattice)
+bwplot(GSI~SexF|factor(Month), data=squid) #zanimivo
+```
+
+
+```{r}
+#zdaj pa še obrnemo
+bwplot(GSI~factor(Month)|SexF, data=squid) 
+```
+
+Poskusimo razumeti še vpliv lokacije
+```{r}
+bwplot(GSI~factor(Month)|SexF*LocationF, data=squid)
+```
+
+
+```{r}
+coplot(GSI~factor(Month)|SexF*LocationF, data=squid) #oboje skupaj
+```
+
+Lokaciji 4 in 2 sta bili slabo merjeni in nam samo delata šum. Poskusimo brez.
+```{r}
+squid2 = squid[squid$Location != 2 & squid$Location != 4,]#nočemo lokacij 2 in 4
+#Naloga: copy-paste kodo iz prejšnjih dveh "chunk"-a in zamenjaj podatke za squid2
+
+```
+
+*THE END* (za tokrat ;))
+
+
+#DOMAČA NALOGA
+
+Domača naloga je v DataCamp-u, dobiš po e-mailu. Predlagam, da se vsega lotiš kot računalniške igrice - pravzaprav se z računalnikom igraš, on postavlja uganke, ti pa jih rešuješ. :)
+
+
+*POMEMBNO: ČE DOMAČE NALOGE NE BOŠ OPRAVIL(A), BOŠ NA NASLEDNJIH VAJAH ZELO TEŽKO SLEDIL(A).*
