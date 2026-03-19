@@ -1,4 +1,4 @@
-# Preoblikovanje in vizualizacija podatkov v R-u
+# Učno gradivo, preoblikovanje in vizualizacija podatkov v R-u
 
 **Univerza v Ljubljani, Biotehniška fakulteta**
 
@@ -6,17 +6,10 @@
 
 **Predmet: Analiza in vizualizacija bioloških podatkov (MSc Biologija, izbirni predmet)**
 
-**Avtor: Tomaž Skrbinšek**
-
-**Kontakt: tomaz.skrbinsek@bf.uni-lj.si**
-
-**Za predavatelje:** Predavanja so tukaj v .pdf. Če potrebujete .pptx, mi pišite.
-
-### Vsebina
-
 Tukaj so zbrani učni materiali za del predmeta "preoblikovanje in vizualizacija podatkov s programskim jezikom R". Učne materiale osvežujem tekom vsakega šolskega leta, ko predmet izvajamo.
 
-Pričakuje se, da študent že pozna osnove programskega jezika R in delov v okolju R Studio. Poudarek je na naprednih R paketih "ekosistema" tidyverse, na zadnjih dveh vajah pa na samostojnosti pri analizah podatkov z R-om.
+Pričakuje se, da študent že pozna osnove programskega jezika R in delov v okolju R Studio. 
+
 ### Uporaba
 Vse praktične vaje so pripravljene kot .Rmd (R Markdown) skripte, kjer so kot prosto besedilo napisana navodila, vmes pa je R koda oziroma študenti sami vstavijo R kodo. Zraven so tudi .Rmd datoteke z rešitvami.
 
