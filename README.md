@@ -1,4 +1,4 @@
-# Preoblikovanje in vizualizacija podatkov v R-u
+# Preoblikovanje in vizualizacija podatkov v R-u, učno gradivo
 
 **Univerza v Ljubljani, Biotehniška fakulteta**
 
