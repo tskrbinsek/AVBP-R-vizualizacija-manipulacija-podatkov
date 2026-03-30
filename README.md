@@ -14,7 +14,7 @@
 
 ### Vsebina
 
-Tukaj so zbrani učni materiali za del predmeta "preoblikovanje in vizualizacija podatkov s programskim jezikom R". Učne materiale osvežujem tekom vsakega šolskega leta, ko predmet izvajamo.
+Tukaj so zbrana učna gradiva za del predmeta "preoblikovanje in vizualizacija podatkov s programskim jezikom R". Učna gradiva osvežujem tekom vsakega šolskega leta, ko predmet izvajamo.
 
 Pričakuje se, da študent že pozna osnove programskega jezika R in delov v okolju R Studio. Poudarek je na naprednih R paketih "ekosistema" tidyverse, na zadnjih dveh vajah pa na samostojnosti pri analizah podatkov z R-om.
 ### Uporaba
